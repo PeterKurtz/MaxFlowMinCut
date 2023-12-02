@@ -33,44 +33,66 @@ public class Graph {
      */
     public int findMaxFlow(int s, int t, boolean report) {
 
-        findAugmentingPath(s, t);
-
+        ArrayList<Integer> augmentedPath = findAugmentingPath(s, t);
+        System.out.println(augmentedPath);
+        int minCapacity = findMinCapacity(augmentedPath, t);
+        System.out.println(minCapacity);
         return 0;
     }
 
     private ArrayList<Integer> findAugmentingPath(int s, int t) {
-        ArrayList<Integer> augmentingPath = new ArrayList<>();
-        augmentingPath.add(1);
+        ArrayList<Integer> augmentedPath = new ArrayList<Integer>();
+        augmentedPath.add(s);
 
-        Queue<Integer> queue = new PriorityQueue<>();
-        queue.add(vertices[s].id);
+        Queue<ArrayList<Integer>> queue = new LinkedList<>();
+        queue.add(augmentedPath);
         vertices[s].visited = true;
 
-        while (!queue.isEmpty()){
-            int nodeFromQueue = queue.remove();
-            for (int i = 0; i < vertices[nodeFromQueue].successor.size(); i++){
+        while (!queue.isEmpty()) {
+            augmentedPath = queue.remove();
 
-                int adjacentNodeId = vertices[nodeFromQueue].successor.get(i).to;
-                GraphNode adjacentNode = vertices[adjacentNodeId];
-                int capacityToAdjacent = vertices[nodeFromQueue].successor.get(i).capacity;
+            int nodeId = augmentedPath.get(augmentedPath.size() - 1);
 
-                System.out.println("adjacentNodeId: " + adjacentNodeId);
-                System.out.print("adjacentNode: " + adjacentNode);
-                System.out.println("capacityToAdjacent: " + capacityToAdjacent);
+            for (int i = 0; i < vertices[nodeId].successor.size(); i++) {
 
-                if (capacityToAdjacent > 0 && !vertices[adjacentNodeId].visited && adjacentNode.id != s) {
-                    adjacentNode.parent = nodeFromQueue;
-                    vertices[nodeFromQueue].visited = true;
-                    queue.add(adjacentNodeId);
-                    System.out.println("Node enqueued!");
+                ArrayList newAugmentedPath = new ArrayList(augmentedPath);
+
+                int nextNode = vertices[nodeId].successor.get(i).to;
+                int capacityToNext = vertices[nodeId].successor.get(i).capacity;
+                boolean isNextVisited = vertices[nextNode].visited;
+
+                if (capacityToNext > 0 && !isNextVisited && nextNode != s) {
+                    newAugmentedPath.add(nextNode);
+                    queue.add(newAugmentedPath);
+                    vertices[nextNode].visited = true;
                 }
-                System.out.println();
+                if (((int) newAugmentedPath.get(newAugmentedPath.size() - 1)) == t) {
+                    return newAugmentedPath;
+                }
             }
-            //System.out.println(vertices[v].successor.get(0).to);
+        }
+        return null;
+    }
+
+    private int findMinCapacity(ArrayList<Integer> augmentedPath, int t) {
+
+        int minCapacity = Integer.MAX_VALUE;
+
+        for (int i = 0; i < augmentedPath.size(); i++) {
+            int nodeId = vertices[augmentedPath.get(i)].id;
+            LinkedList<GraphNode.EdgeInfo> nodeSuccessors = vertices[nodeId].successor;
+            minCapacity = checkCapacity(nodeSuccessors, nodeId, t, minCapacity);
+        }
+        return minCapacity;
+    }
+
+    private int checkCapacity(LinkedList<GraphNode.EdgeInfo> nodeSuccessors, int nodeId, int t, int minCapacity) {
+        for (int p = 0; p < nodeSuccessors.size(); p++) {
+
+
         }
 
-        return augmentingPath;
-
+        return minCapacity;
     }
 
     /**
