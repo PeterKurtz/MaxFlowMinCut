@@ -78,21 +78,29 @@ public class Graph {
 
         int minCapacity = Integer.MAX_VALUE;
 
-        for (int i = 0; i < augmentedPath.size(); i++) {
+        for (int i = 0; i < augmentedPath.size() - 1; i++) {
             int nodeId = vertices[augmentedPath.get(i)].id;
+            int nextNodeId = vertices[augmentedPath.get(i + 1)].id;
             LinkedList<GraphNode.EdgeInfo> nodeSuccessors = vertices[nodeId].successor;
-            minCapacity = checkCapacity(nodeSuccessors, nodeId, t, minCapacity);
+            minCapacity = checkCapacity(nodeSuccessors, nodeId, nextNodeId, t, minCapacity);
         }
         return minCapacity;
     }
 
-    private int checkCapacity(LinkedList<GraphNode.EdgeInfo> nodeSuccessors, int nodeId, int t, int minCapacity) {
-        for (int p = 0; p < nodeSuccessors.size(); p++) {
-
-
+    private int checkCapacity(LinkedList<GraphNode.EdgeInfo> nodeSuccessors, int nodeId, int nextNodeId, int t, int minCapacity) {
+        int minTest = Integer.MAX_VALUE;
+        for (int p = 0; p < nodeSuccessors.size() - 1; p++) {
+            if (nodeSuccessors.get(p).to == nextNodeId) {
+                minTest = nodeSuccessors.get(p).capacity;
+                break;
+            }
         }
-
-        return minCapacity;
+        if (minCapacity > minTest) {
+            return minTest;
+        }
+        else {
+            return minCapacity;
+        }
     }
 
     /**
