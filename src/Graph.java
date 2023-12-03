@@ -33,31 +33,25 @@ public class Graph {
      */
     public int findMaxFlow(int s, int t, boolean report) {
 
+        System.out.println("-- Max Flow: " + name + " --");
+
         ArrayList<Integer> augmentedPath = findAugmentingPath(s, t);
-        System.out.println(augmentedPath);
-        int minCapacity = findMinCapacity(augmentedPath, t);
-        setFlow(augmentedPath, minCapacity);
-        resetVisitedNodes();
+        int totalFlow = 0;
 
-        ArrayList<Integer> augmentedPath2 = findAugmentingPath(s, t);
-        System.out.println(augmentedPath2);
-        int minCapacity2 = findMinCapacity(augmentedPath2, t);
-        setFlow(augmentedPath2, minCapacity2);
-        resetVisitedNodes();
+        while (augmentedPath != null) {
+            int minCapacity = findMinCapacity(augmentedPath, t);
+            setFlow(augmentedPath, minCapacity);
+            resetVisitedNodes();
+            totalFlow = totalFlow + minCapacity;
 
-        ArrayList<Integer> augmentedPath3 = findAugmentingPath(s, t);
-        System.out.println(augmentedPath3);
-        int minCapacity3 = findMinCapacity(augmentedPath3, t);
-        setFlow(augmentedPath3, minCapacity3);
-        resetVisitedNodes();
+            if (report == true) {
+                displayFlow(minCapacity, augmentedPath);
+            }
 
-        ArrayList<Integer> augmentedPath4 = findAugmentingPath(s, t);
-        System.out.println(augmentedPath4);
-        int minCapacity4 = findMinCapacity(augmentedPath4, t);
-        setFlow(augmentedPath4, minCapacity4);
-        resetVisitedNodes();
+            augmentedPath = findAugmentingPath(s, t);
+        }
 
-        return minCapacity4 + minCapacity3 + minCapacity2 + minCapacity;
+        return totalFlow;
     }
 
     private ArrayList<Integer> findAugmentingPath(int s, int t) {
@@ -152,6 +146,14 @@ public class Graph {
                 vertices[i].visited = false;
             }
         }
+    }
+
+    private void displayFlow(int flow, ArrayList<Integer> augmentedPath) {
+        System.out.print("Flow " + flow + ": ");
+        for (int node : augmentedPath) {
+            System.out.print(node + " ");
+        }
+        System.out.println();
     }
 
     /**
