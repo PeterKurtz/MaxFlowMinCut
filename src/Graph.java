@@ -36,8 +36,28 @@ public class Graph {
         ArrayList<Integer> augmentedPath = findAugmentingPath(s, t);
         System.out.println(augmentedPath);
         int minCapacity = findMinCapacity(augmentedPath, t);
-        System.out.println(minCapacity);
-        return 0;
+        setFlow(augmentedPath, minCapacity);
+        resetVisitedNodes();
+
+        ArrayList<Integer> augmentedPath2 = findAugmentingPath(s, t);
+        System.out.println(augmentedPath2);
+        int minCapacity2 = findMinCapacity(augmentedPath2, t);
+        setFlow(augmentedPath2, minCapacity2);
+        resetVisitedNodes();
+
+        ArrayList<Integer> augmentedPath3 = findAugmentingPath(s, t);
+        System.out.println(augmentedPath3);
+        int minCapacity3 = findMinCapacity(augmentedPath3, t);
+        setFlow(augmentedPath3, minCapacity3);
+        resetVisitedNodes();
+
+        ArrayList<Integer> augmentedPath4 = findAugmentingPath(s, t);
+        System.out.println(augmentedPath4);
+        int minCapacity4 = findMinCapacity(augmentedPath4, t);
+        setFlow(augmentedPath4, minCapacity4);
+        resetVisitedNodes();
+
+        return minCapacity4 + minCapacity3 + minCapacity2 + minCapacity;
     }
 
     private ArrayList<Integer> findAugmentingPath(int s, int t) {
@@ -100,6 +120,37 @@ public class Graph {
         }
         else {
             return minCapacity;
+        }
+    }
+
+    private void setFlow(ArrayList<Integer> augmentedPath, int maxFlow) {
+
+        for (int i = 0; i < augmentedPath.size() - 1; i++) {
+
+            GraphNode node = vertices[augmentedPath.get(i)];
+            int nodeId = node.id;
+            GraphNode nextNode = vertices[augmentedPath.get(i + 1)];
+            int nextNodeId = nextNode.id;
+
+            for (int p = 0; p < node.successor.size(); p++){
+                if (node.successor.get(p).to == nextNodeId) {
+                    node.successor.get(p).capacity = node.successor.get(p).capacity - maxFlow;
+                }
+            }
+            for (int u = 0; u < nextNode.successor.size(); u++) {
+                if (nextNode.successor.get(u).to == nodeId) {
+                    nextNode.successor.get(u).capacity = maxFlow;
+                }
+            }
+            //System.out.println(node + " -> " + nextNode);
+        }
+    }
+
+    private void resetVisitedNodes() {
+        for (int i = 0; i < vertices.length; i++) {
+            if (vertices[i].visited) {
+                vertices[i].visited = false;
+            }
         }
     }
 
