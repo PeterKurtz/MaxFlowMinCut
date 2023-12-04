@@ -8,7 +8,7 @@ public class Assignment7Driver {
         System.out.printf("Total Flow: %d\n", flow1);
         g1.findMinCut(0);
 
-        Graph g2 = buildGraph("demands2.txt");
+        /*Graph g2 = buildGraph("demands2.txt");
         int flow2 = g2.findMaxFlow(0, 8, true);
         System.out.printf("Total Flow: %d\n", flow2);
         g2.findMinCut(0);
@@ -31,7 +31,7 @@ public class Assignment7Driver {
         Graph g6 = buildGraph("demands6.txt");
         int flow6 = g6.findMaxFlow(0, 7, true);
         System.out.printf("Total Flow: %d\n", flow6);
-        g6.findMinCut(0);
+        g6.findMinCut(0);*/
     }
 
     public static Graph buildGraph(String filename) {

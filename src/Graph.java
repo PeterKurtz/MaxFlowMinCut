@@ -3,6 +3,7 @@ import java.util.*;
 public class Graph {
     private final GraphNode[] vertices;  // Adjacency list for graph.
     private final String name;  //The file from which the graph was created.
+    private ArrayList<ArrayList<Integer>> flow = new ArrayList<ArrayList<Integer>>();
 
     public Graph(String name, int vertexCount) {
         this.name = name;
@@ -20,6 +21,11 @@ public class Graph {
 
         // This adds the actual requested edge, along with its capacity
         vertices[source].addEdge(source, destination, capacity);
+        ArrayList<Integer> path = new ArrayList<Integer>();
+        path.add(source);
+        path.add(destination);
+
+        flow.add(path);
 
         // TODO: This is what you have to describe in the required README.TXT file
         //       that you submit as part of this assignment.
@@ -50,6 +56,8 @@ public class Graph {
 
             augmentedPath = findAugmentingPath(s, t);
         }
+
+        displayEdgeFlow(t);
 
         return totalFlow;
     }
@@ -136,7 +144,6 @@ public class Graph {
                     nextNode.successor.get(u).capacity = maxFlow;
                 }
             }
-            //System.out.println(node + " -> " + nextNode);
         }
     }
 
@@ -154,6 +161,43 @@ public class Graph {
             System.out.print(node + " ");
         }
         System.out.println();
+    }
+
+    private void displayEdgeFlow(int t) {
+        int totFlow;
+        int firstNode;
+        int secNode;
+        int toCap = 0;
+        int fromCap = 0;
+
+        for (int a = 0; a < flow.size(); a++) {
+
+            toCap = 0;
+            fromCap = 0;
+
+            firstNode = flow.get(a).get(0);
+            secNode = flow.get(a).get(1);
+
+            for (int i = 0; i < vertices[firstNode].successor.size(); i++){
+                if (vertices[firstNode].successor.get(i).to == secNode) {
+                    toCap = vertices[firstNode].successor.get(i).capacity;
+                    break;
+                }
+            }
+            for (int b =  0; b < vertices[secNode].successor.size(); b++) {
+                if (vertices[secNode].successor.get(b).to == firstNode)  {
+                    fromCap = vertices[secNode].successor.get(b).capacity;
+                    break;
+                }
+            }
+            totFlow = fromCap - toCap;
+            System.out.println("Edge" + " " + firstNode + " " + secNode);
+            System.out.println("to " + toCap);
+            System.out.println("from " + fromCap);
+
+
+        }
+
     }
 
     /**
