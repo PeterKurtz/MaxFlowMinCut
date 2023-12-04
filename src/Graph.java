@@ -1,5 +1,7 @@
 import java.util.*;
 
+import static java.lang.Math.abs;
+
 public class Graph {
     private final GraphNode[] vertices;  // Adjacency list for graph.
     private final String name;  //The file from which the graph was created.
@@ -141,7 +143,7 @@ public class Graph {
             }
             for (int u = 0; u < nextNode.successor.size(); u++) {
                 if (nextNode.successor.get(u).to == nodeId) {
-                    nextNode.successor.get(u).capacity = maxFlow;
+                    nextNode.successor.get(u).capacity = nextNode.successor.get(u).capacity + maxFlow;
                 }
             }
         }
@@ -191,9 +193,13 @@ public class Graph {
                 }
             }
             totFlow = fromCap - toCap;
-            System.out.println("Edge" + " " + firstNode + " " + secNode);
-            System.out.println("to " + toCap);
-            System.out.println("from " + fromCap);
+
+
+
+
+            System.out.println("Edge("+firstNode+", " + secNode + ") transports " + totFlow + " items");
+
+
 
 
         }
