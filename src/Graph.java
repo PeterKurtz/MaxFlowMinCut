@@ -59,6 +59,8 @@ public class Graph {
             augmentedPath = findAugmentingPath(s, t);
         }
 
+        System.out.println();
+
         displayEdgeFlow(t);
 
         return totalFlow;
@@ -180,45 +182,58 @@ public class Graph {
             firstNode = flow.get(a).get(0);
             secNode = flow.get(a).get(1);
 
-            for (int i = 0; i < vertices[firstNode].successor.size(); i++){
-                if (vertices[firstNode].successor.get(i).to == secNode) {
-                    toCap = vertices[firstNode].successor.get(i).capacity;
-                    break;
-                }
-            }
             for (int b =  0; b < vertices[secNode].successor.size(); b++) {
                 if (vertices[secNode].successor.get(b).to == firstNode)  {
                     fromCap = vertices[secNode].successor.get(b).capacity;
                     break;
                 }
             }
-            totFlow = fromCap - toCap;
 
-
-
-
-            System.out.println("Edge("+firstNode+", " + secNode + ") transports " + totFlow + " items");
-
-
-
+            if (fromCap > 0){
+                System.out.println("Edge("+firstNode+", " + secNode + ") transports " + fromCap + " items");
+            }
 
         }
 
     }
 
     /**
-     * Algorithm to find an augmenting path in a network
-     */
-    private boolean hasAugmentingPath(int s, int t) {
-        // TODO:
-        return false;
-    }
-
-    /**
      * Algorithm to find the min-cut edges in a network
      */
     public void findMinCut(int s) {
-        // TODO:
+        resetVisitedNodes();
+        Queue<Integer> queue = new PriorityQueue<>();
+        queue.add(s);
+
+        int nodeId;
+        int nextCapacity;
+        boolean nextIsVisited;
+        int nextNodeId;
+
+        System.out.println();
+
+        while (!queue.isEmpty()){
+            nodeId = queue.remove();
+
+            vertices[nodeId].visited = true;
+
+            for (int i = 0; i < vertices[nodeId].successor.size(); i++){
+                nextCapacity = vertices[nodeId].successor.get(i).capacity;
+                nextIsVisited = vertices[vertices[nodeId].successor.get(i).to].visited;
+                nextNodeId = vertices[nodeId].successor.get(i).to;
+
+                if (nextCapacity > 0 && !nextIsVisited) {
+                    queue.add(nextNodeId);
+                }
+                else if (nextCapacity == 0 && !nextIsVisited) {
+                    System.out.println("Min Cut Edge: (" + nodeId + ", " + nextNodeId + ")");
+                    vertices[nextNodeId].visited = true;
+                }
+            }
+        }
+
+        System.out.println();
+
     }
 
     public String toString() {
