@@ -41,7 +41,7 @@ public class Graph {
 
         System.out.println("-- Max Flow: " + name + " --");
 
-        ArrayList<Integer> augmentedPath = findAugmentingPath(s, t);
+        ArrayList<Integer> augmentedPath = hasAugmentingPath(s, t);
         int totalFlow = 0;
 
         while (augmentedPath != null) {
@@ -54,7 +54,7 @@ public class Graph {
                 displayFlow(minCapacity, augmentedPath);
             }
 
-            augmentedPath = findAugmentingPath(s, t);
+            augmentedPath = hasAugmentingPath(s, t);
         }
 
         System.out.println();
@@ -64,7 +64,7 @@ public class Graph {
         return totalFlow;
     }
 
-    private ArrayList<Integer> findAugmentingPath(int s, int t) {
+    private ArrayList<Integer> hasAugmentingPath(int s, int t) {
         ArrayList<Integer> augmentedPath = new ArrayList<Integer>();
         augmentedPath.add(s);
 
