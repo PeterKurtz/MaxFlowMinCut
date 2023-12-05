@@ -1,7 +1,5 @@
 import java.util.*;
 
-import static java.lang.Math.abs;
-
 public class Graph {
     private final GraphNode[] vertices;  // Adjacency list for graph.
     private final String name;  //The file from which the graph was created.
